@@ -1,0 +1,49 @@
+services:
+  # ── DATABASE ────────────────────────────────────────────────────────────────
+  db:
+    image: postgres:16-alpine
+    container_name: star-wars-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: nestjs
+      POSTGRES_PASSWORD: nestjs_password
+      POSTGRES_DB: star_wars_api
+    ports:
+      - '5433:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U nestjs -d star_wars_api']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ── API ──────────────────────────────────────────────────────────────────────
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    container_name: star-wars-api
+    ports:
+      - '3000:3000'
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      DATABASE_URL: postgresql://nestjs:nestjs_password@db:5432/star_wars_api?schema=public
+      JWT_SECRET: super_secret_star_wars_key_12345
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: ['CMD-SHELL', 'wget -qO- http://localhost:3000 || exit 1']
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+
+
+volumes:
+  postgres_data:
