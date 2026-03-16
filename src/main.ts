@@ -30,7 +30,7 @@ async function bootstrap(): Promise<void> {
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, document, {
+  SwaggerModule.setup('documentation', app, document, {
     swaggerOptions: { persistAuthorization: true },
   });
 
@@ -39,7 +39,7 @@ async function bootstrap(): Promise<void> {
     `Application running on: http://localhost:${process.env.PORT ?? 3000}\n`,
   );
   process.stdout.write(
-    `Swagger UI available at:  http://localhost:${process.env.PORT ?? 3000}/api\n`,
+    `Swagger UI available at:  http://localhost:${process.env.PORT ?? 3000}/documentation\n`,
   );
 }
 void bootstrap();
