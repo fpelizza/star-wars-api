@@ -8,7 +8,6 @@ services:
       POSTGRES_USER: nestjs
       POSTGRES_PASSWORD: nestjs_password
       POSTGRES_DB: star_wars_api
-      SWAPI_URL: ${SWAPI_URL}
     ports:
       - '5433:5432'
     volumes:
@@ -33,6 +32,7 @@ services:
       PORT: 3000
       DATABASE_URL: ${DATABASE_URL}
       JWT_SECRET: ${JWT_SECRET}
+      SWAPI_URL: ${SWAPI_URL}
     depends_on:
       db:
         condition: service_healthy
