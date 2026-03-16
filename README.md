@@ -1,98 +1,198 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Star Wars API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+## 📂 Project Folder Tree
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
-
-## Description
-
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
-
-## Project setup
-
-```bash
-$ npm install
+```text
+star-wars-api
+├── src
+│   ├── auth                 # Authentication and authorization logic
+│   │   ├── controllers
+│   │   ├── decorators
+│   │   ├── dto
+│   │   ├── guards
+│   │   ├── interfaces
+│   │   ├── modules
+│   │   ├── services
+│   │   └── strategies
+│   ├── films                # Core domain for films and external SWAPI sync
+│   │   ├── controllers
+│   │   ├── dto
+│   │   ├── filters
+│   │   ├── interfaces
+│   │   ├── mappers
+│   │   ├── modules
+│   │   ├── repositories
+│   │   └── services
+│   ├── prisma               # Database abstraction using Prisma
+│   │   ├── modules
+│   │   └── services
+│   ├── users                # User entity management
+│   │   ├── mappers
+│   │   ├── modules
+│   │   ├── repositories
+│   │   └── services
+│   ├── app.controller.ts
+│   ├── app.module.ts
+│   ├── app.service.ts
+│   └── main.ts
+├── prisma                   # Database schemas and migrations
+│   ├── migrations
+│   └── schema.prisma
+├── test                     # Testing suites
+│   ├── e2e
+│   ├── integration
+│   └── unit
+├── docker-compose.yml       # Docker Compose configuration
+├── Dockerfile               # Docker configuration for API
+├── package.json             # Dependencies and scripts
+└── README.md                # Project documentation
 ```
 
-## Compile and run the project
+## ⚙️ Installation Guide
 
-```bash
-# development
-$ npm run start
+### Prerequisites
 
-# watch mode
-$ npm run start:dev
+- Node.js (v18 or higher)
+- Docker Desktop (or separate Docker Engine and Docker Compose)
+- npm or yarn
 
-# production mode
-$ npm run start:prod
+### Steps
+
+1. **Clone the repository:**
+
+   ```bash
+   git clone https://github.com/your-username/star-wars-api.git
+   cd star-wars-api
+   ```
+
+2. **Install dependencies:**
+
+   ```bash
+   npm install
+   ```
+
+3. **Set up Environment Variables:**
+   ```bash
+   cp .env.example .env
+   ```
+   _Edit the `.env` file inside your project root to match your local setup._
+
+## 🚀 Running the project locally
+
+To run the project completely in local environment using Node:
+
+1. **Start the database container:**
+   Make sure you have Docker running in the background.
+
+   ```bash
+   docker-compose up -d db
+   ```
+
+2. **Run database migrations:**
+   Apply the current schema to the PostgreSQL instance.
+
+   ```bash
+   npx prisma migrate dev
+   ```
+
+3. **Start the application:**
+
+   ```bash
+   # Development mode
+   npm run start:dev
+
+   # Production mode
+   npm run start:prod
+   ```
+
+The application will be available at `http://localhost:3000`.
+
+## 🐳 Running with Docker
+
+You can run the entire application stack (API and database) using Docker Compose.
+
+1. **Build and start all containers:**
+
+   ```bash
+   docker-compose up -d --build
+   ```
+
+2. **Check the logs (optional):**
+
+   ```bash
+   docker-compose logs -f api
+   ```
+
+3. **Stop the containers:**
+   ```bash
+   docker-compose down
+   ```
+
+## 🔐 Environment Variables
+
+The project uses environment variables for configuration to avoid hardcoded credentials. Below is a sample `.env` configuration:
+
+```env
+# Database complete connection string
+DATABASE_URL="postgresql://nestjs:nestjs_password@localhost:5433/star_wars_api?schema=public"
+
+# Secret key used for signing JWT tokens
+JWT_SECRET="super_secret_star_wars_key_12345"
+
+# External API base URL
+SWAPI_URL="https://www.swapi.tech/api/films"
 ```
 
-## Run tests
+## 🗄 Database Setup
+
+This project uses [Prisma ORM](https://www.prisma.io/). When changing models in `prisma/schema.prisma`, use the following commands:
+
+- **Generate the Prisma Client**:
+  ```bash
+  npx prisma generate
+  ```
+- **Create a new migration**:
+  ```bash
+  npx prisma migrate dev --name your_migration_name
+  ```
+- **Apply migrations in production**:
+  ```bash
+  npx prisma migrate deploy
+  ```
+
+## 🧪 Testing
+
+The repository has comprehensive test suites covering Unit, Integration, and End-to-End (E2E) testing.
 
 ```bash
-# unit tests
-$ npm run test
+# Run unit tests
+npm run test:unit
 
-# e2e tests
-$ npm run test:e2e
+# Run integration tests
+npm run test:integration
 
-# test coverage
-$ npm run test:cov
+# Run e2e tests
+npm run test:e2e
+
+# Run all tests with coverage
+npm run test:cov
 ```
 
-## Deployment
+## 📡 API Usage
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+The application uses explicit DTOs for input validation and structured interfaces for responses.
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+### Common Endpoints
 
-```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
-```
+**Authentication:**
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+- `POST /auth/register` - Create a new user account.
+- `POST /auth/login` - Authenticate and receive a JWT token.
 
-## Resources
+**Films:**
 
-Check out a few resources that may come in handy when working with NestJS:
-
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+- `GET /films` - List all films (allows filtering).
+- `GET /films/:id` - Get details of a specific film.
+- `POST /films` - Create a new film entry (Admin only).
+- `PATCH /films/:id` - Update an existing film (Admin only).
+- `DELETE /films/:id` - Soft delete a film (Admin only).
