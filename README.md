@@ -1,4 +1,7 @@
 # Star Wars API
+## Production URL (Amazon EC2)
+SWAGGER URL: http://56.124.34.26:3000/documentation/
+API BASE URL: http://56.124.34.26:3000/
 
 ## 📂 Project Folder Tree
 
